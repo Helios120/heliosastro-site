@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HeliosAstro — Astrologie symbolique, logiciel et rapports premium</title>
+  <meta name="description" content="HeliosAstro : astrologie symbolique, logiciel astrologique, lecture des degrés, rapports PDF premium et univers éditorial." />
+  <meta name="keywords" content="HeliosAstro, astrologie, logiciel astrologique, degrés astrologiques, thème natal, transits, rapport astrologique, PDF, astrologie symbolique" />
+  <meta name="author" content="HeliosAstro" />
+
+  <meta property="og:title" content="HeliosAstro — Astrologie symbolique, logiciel et rapports premium" />
+  <meta property="og:description" content="Découvrez HeliosAstro : logiciel astrologique, lecture symbolique des degrés et rapports PDF personnalisés." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://heliosastro.com" />
+  <meta property="og:image" content="https://heliosastro.com/assets/og-heliosastro.jpg" />
+
+  <meta name="theme-color" content="#09090d" />
+
+  <style>
+    :root{
+      --bg:#07070b;
+      --bg2:#0d0d13;
+      --panel:#14141b;
+      --panel2:#1c1c26;
+      --gold:#d4b06a;
+      --gold-soft:#f0d6a0;
+      --text:#f7f1e7;
+      --muted:#b8ab91;
+      --line:rgba(212,176,106,.22);
+      --ok:#96dc96;
+      --bad:#ff9d9d;
+      --shadow:0 18px 50px rgba(0,0,0,.35);
+      --radius:22px;
+      --max:1180px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top, rgba(212,176,106,.14), transparent 26%),
+        linear-gradient(180deg, #0b0b10 0%, #07070b 100%);
+      min-height:100vh;
+    }
+
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    .container{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:0 18px;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:100;
+      backdrop-filter:blur(10px);
+      background:rgba(7,7,11,.72);
+      border-bottom:1px solid rgba(255,255,255,.04);
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      min-height:74px;
+      gap:20px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:700;
+      letter-spacing:.08em;
+      color:var(--gold);
+      font-size:1.08rem;
+    }
+
+    .brand-mark{
+      width:40px;
+      height:40px;
+      border-radius:50%;
+      border:1px solid var(--line);
+      display:grid;
+      place-items:center;
+      background:radial-gradient(circle, rgba(212,176,106,.18), rgba(212,176,106,.04));
+      box-shadow:var(--shadow);
+      font-size:1.1rem;
+    }
+
+    .menu{
+      display:flex;
+      gap:18px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .menu a{
+      color:var(--muted);
+      font-size:.95rem;
+      transition:.2s ease;
+    }
+
+    .menu a:hover{
+      color:var(--gold-soft);
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:13px 18px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(212,176,106,.18), rgba(212,176,106,.08));
+      color:var(--text);
+      font-weight:700;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .btn:hover{
+      transform:translateY(-1px);
+      border-color:rgba(212,176,106,.45);
+    }
+
+    .btn-secondary{
+      background:transparent;
+    }
+
+    .hero{
+      padding:72px 0 40px;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:28px;
+      align-items:center;
+    }
+
+    .eyebrow{
+      display:inline-block;
+      padding:8px 14px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      color:var(--gold-soft);
+      font-size:.9rem;
+      margin-bottom:18px;
+      background:rgba(212,176,106,.08);
+    }
+
+    .hero h1{
+      margin:0 0 18px;
+      font-size:clamp(2.3rem, 5vw, 4.3rem);
+      line-height:1.04;
+      letter-spacing:.02em;
+      color:var(--gold-soft);
+    }
+
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.75;
+      font-size:1.05rem;
+      max-width:760px;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:26px;
+    }
+
+    .hero-card{
+      background:linear-gradient(180deg, rgba(255,255,255,.03), transparent), var(--panel);
+      border:1px solid var(--line);
+      border-radius:28px;
+      padding:24px;
+      box-shadow:var(--shadow);
+    }
+
+    .astro-wheel{
+      aspect-ratio:1/1;
+      border-radius:50%;
+      border:1px solid rgba(212,176,106,.35);
+      background:
+        radial-gradient(circle, rgba(212,176,106,.12), transparent 52%),
+        conic-gradient(from 0deg,
+          rgba(212,176,106,.22), rgba(255,255,255,.03), rgba(212,176,106,.14), rgba(255,255,255,.03),
+          rgba(212,176,106,.18), rgba(255,255,255,.03), rgba(212,176,106,.1), rgba(255,255,255,.03),
+          rgba(212,176,106,.22)
+        );
+      position:relative;
+      overflow:hidden;
+      display:grid;
+      place-items:center;
+      box-shadow:inset 0 0 50px rgba(0,0,0,.35);
+    }
+
+    .astro-wheel::before{
+      content:"";
+      position:absolute;
+      inset:10%;
+      border-radius:50%;
+      border:1px solid rgba(212,176,106,.18);
+    }
+
+    .astro-wheel::after{
+      content:"✶";
+      position:absolute;
+      font-size:4rem;
+      color:rgba(212,176,106,.78);
+      text-shadow:0 0 22px rgba(212,176,106,.28);
+    }
+
+    section{
+      padding:34px 0;
+    }
+
+    .section-title{
+      margin:0 0 12px;
+      font-size:2rem;
+      color:var(--gold-soft);
+    }
+
+    .section-intro{
+      margin:0 0 26px;
+      color:var(--muted);
+      line-height:1.7;
+      max-width:900px;
+    }
+
+    .cards-3{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:22px;
+    }
+
+    .cards-2{
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:22px;
+    }
+
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.03), transparent), var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:22px;
+      box-shadow:var(--shadow);
+    }
+
+    .card h3{
+      margin:0 0 12px;
+      color:var(--gold);
+      font-size:1.2rem;
+    }
+
+    .card p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.7;
+    }
+
+    .list{
+      margin:14px 0 0;
+      padding-left:18px;
+      color:var(--muted);
+      line-height:1.8;
+    }
+
+    .pricing{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .price-box{
+      background:rgba(212,176,106,.08);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+      margin-bottom:18px;
+    }
+
+    .price-name{
+      font-size:1.08rem;
+      color:var(--text);
+      font-weight:700;
+    }
+
+    .price-value{
+      margin-top:8px;
+      font-size:2rem;
+      color:var(--gold-soft);
+      font-weight:700;
+    }
+
+    label{
+      display:block;
+      margin:12px 0 6px;
+      color:var(--muted);
+      font-size:.95rem;
+    }
+
+    input, textarea, select{
+      width:100%;
+      padding:13px 14px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.08);
+      background:var(--panel2);
+      color:var(--text);
+      outline:none;
+      font-size:1rem;
+    }
+
+    textarea{
+      min-height:110px;
+      resize:vertical;
+    }
+
+    .small{
+      color:var(--muted);
+      font-size:.88rem;
+      margin-top:10px;
+      line-height:1.6;
+    }
+
+    .paypal-zone{
+      min-height:54px;
+      margin-top:18px;
+    }
+
+    .status{
+      margin-top:16px;
+      padding:14px 16px;
+      border-radius:14px;
+      display:none;
+      line-height:1.6;
+    }
+
+    .status.show{display:block}
+    .status.ok{
+      background:rgba(150,220,150,.12);
+      border:1px solid rgba(150,220,150,.34);
+      color:#e8ffe8;
+    }
+
+    .status.bad{
+      background:rgba(255,157,157,.12);
+      border:1px solid rgba(255,157,157,.34);
+      color:#ffe5e5;
+    }
+
+    .download-link{
+      color:var(--gold-soft);
+      font-weight:700;
+      text-decoration:none;
+    }
+
+    .footer{
+      padding:36px 0 60px;
+      color:var(--muted);
+      text-align:center;
+      font-size:.94rem;
+    }
+
+    @media (max-width: 980px){
+      .hero-grid,
+      .pricing,
+      .cards-2{
+        grid-template-columns:1fr;
+      }
+
+      .cards-3{
+        grid-template-columns:1fr;
+      }
+
+      .menu{
+        display:none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="#top">
+        <span class="brand-mark">☉</span>
+        <span>HELIOSASTRO</span>
+      </a>
+
+      <nav class="menu">
+        <a href="#logiciel">Logiciel</a>
+        <a href="#methode">Méthode</a>
+        <a href="#livre">Livre</a>
+        <a href="#rapports">Rapports</a>
+        <a href="#commande">Commander</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <a class="btn" href="#commande">Commander</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">Astrologie symbolique • Lecture des degrés • Rapports sur mesure</span>
+          <h1>HeliosAstro, l’astrologie pensée comme un langage de précision.</h1>
+          <p>
+            HeliosAstro n’est pas une astrologie décorative. C’est une approche structurée,
+            symbolique et exigeante, conçue pour lire les dynamiques profondes d’un thème,
+            la logique des degrés, les périodes charnières et les axes de transformation.
+            Chaque rapport vise une seule chose : produire une lecture claire, dense, utile
+            et intelligible, loin des banalités recyclées.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn" href="#commande">Commander un rapport</a>
+            <a class="btn btn-secondary" href="#logiciel">Découvrir le logiciel</a>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <div class="astro-wheel" aria-label="Illustration symbolique astrologique"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="logiciel">
+      <div class="container">
+        <h2 class="section-title">Le logiciel HeliosAstro</h2>
+        <p class="section-intro">
+          HeliosAstro a vocation à devenir un véritable environnement de lecture astrologique :
+          calcul, structuration, interprétation, degrés, axes, croisements, rapports et restitution
+          claire pour le consultant. L’idée est simple : unir profondeur symbolique et logique logicielle.
+        </p>
+
+        <div class="cards-3">
+          <article class="card">
+            <h3>Lecture fine des 360 degrés</h3>
+            <p>
+              Le système est pensé pour accueillir une interprétation degré par degré,
+              avec prise en compte des résonances, des répétitions symboliques et des
+              croisements de sens. On sort de l’astrologie automatique pour entrer dans
+              une lecture plus chirurgicale.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Architecture évolutive</h3>
+            <p>
+              Le logiciel peut intégrer thème natal, transits, dominantes, aspects,
+              maisons, cycles, mais aussi des couches d’analyse plus rares : degrés
+              sensibles, symbolique croisée, axes de vocation, zones de tension et points de bascule.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Production de rapports intelligents</h3>
+            <p>
+              HeliosAstro ne sert pas uniquement à afficher des données. Il sert à transformer
+              ces données en lecture exploitable, hiérarchisée, lisible et vendable,
+              sous forme de rapports PDF premium à forte valeur perçue.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="methode">
+      <div class="container">
+        <h2 class="section-title">La méthode</h2>
+        <p class="section-intro">
+          HeliosAstro repose sur une conviction simple : un thème ne se lit pas comme une addition
+          mécanique de planètes, de signes et de maisons. Il se lit comme une architecture.
+          Une structure de forces, de tensions, de répétitions, d’échos et de degrés de sens.
+        </p>
+
+        <div class="cards-2">
+          <article class="card">
+            <h3>Une astrologie de structure</h3>
+            <p>
+              L’objectif n’est pas de produire une lecture vague ou flatteuse, mais une lecture
+              structurée, hiérarchisée et cohérente. On cherche la logique interne d’un thème,
+              pas un habillage poétique interchangeable.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Une restitution lisible</h3>
+            <p>
+              Même lorsqu’elle est profonde, une lecture doit rester claire. La valeur d’un rapport
+              se mesure autant à la qualité de l’analyse qu’à sa capacité à être comprise, relue
+              et utilisée dans la vie réelle.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="livre">
+      <div class="container">
+        <h2 class="section-title">Le livre</h2>
+        <p class="section-intro">
+          Le livre prolonge la vision HeliosAstro : une astrologie de fond, ancrée dans
+          le symbole, la structure, la résonance et la lecture du sens. Il ne s’agit pas
+          seulement d’expliquer des signes ou des planètes, mais de transmettre une méthode
+          de lecture cohérente, profonde et utilisable.
+        </p>
+
+        <div class="cards-2">
+          <article class="card">
+            <h3>Une vision éditoriale forte</h3>
+            <p>
+              Le livre permet de poser l’univers intellectuel et symbolique de la marque :
+              lecture des degrés, géométrie du sens, structure invisible des parcours,
+              articulation entre intuition, rigueur et interprétation.
+            </p>
+            <ul class="list">
+              <li>Présentation de la méthode</li>
+              <li>Approche symbolique et philosophique</li>
+              <li>Extraits choisis</li>
+              <li>Passerelle naturelle vers le logiciel et les rapports</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>Un écosystème cohérent</h3>
+            <p>
+              Le livre, le logiciel et les rapports ne doivent pas vivre séparément.
+              Ensemble, ils créent une marque plus crédible, plus profonde et plus mémorable.
+              En clair : une colonne vertébrale éditoriale, pas une juxtaposition d’outils.
+            </p>
+            <ul class="list">
+              <li>Marque premium et cohérente</li>
+              <li>Positionnement singulier</li>
+              <li>Univers visuel identifiable</li>
+              <li>Produits éditoriaux et digitaux complémentaires</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="rapports">
+      <div class="container">
+        <h2 class="section-title">Rapports disponibles</h2>
+        <p class="section-intro">
+          Les rapports HeliosAstro sont conçus comme de véritables outils de lecture :
+          structurés, précis, personnalisés et pensés pour répondre à une question réelle.
+          Pas de remplissage. Pas de phrases en mousse. Une interprétation dense, claire et utile.
+        </p>
+
+        <div class="cards-3">
+          <article class="card">
+            <h3>Thème natal</h3>
+            <p>
+              Une lecture de fond pour comprendre la structure d’un thème : dominantes,
+              fonctionnement, potentiels, zones de tension, logique personnelle et axes majeurs
+              de construction.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Interprétation 360 degrés</h3>
+            <p>
+              Rapport centré sur la lecture fine des degrés et de leurs résonances.
+              Une approche plus rare, plus technique, plus pointue, pour ceux qui veulent
+              dépasser les lectures standardisées.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Transits actuels</h3>
+            <p>
+              Une lecture orientée période présente : climat, tensions, fenêtres d’ouverture,
+              accélérations, blocages et marges de manœuvre. Idéal pour lire un passage de vie
+              ou préparer une décision importante.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="commande">
+      <div class="container">
+        <h2 class="section-title">Commander un rapport</h2>
+        <p class="section-intro">
+          Commandez votre rapport HeliosAstro directement en ligne. Après validation du paiement,
+          le système prépare votre document PDF. Cette structure est conçue pour évoluer vers une
+          expérience client fluide, professionnelle et haut de gamme.
+        </p>
+
+        <div class="pricing">
+          <div class="card">
+            <h3>Informations client</h3>
+
+            <label for="name">Nom complet</label>
+            <input id="name" type="text" placeholder="Ex. Thierry Tafani" />
+
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="exemple@email.com" />
+
+            <label for="birthDate">Date de naissance</label>
+            <input id="birthDate" type="date" />
+
+            <label for="birthTime">Heure de naissance</label>
+            <input id="birthTime" type="time" />
+
+            <label for="birthPlace">Lieu de naissance</label>
+            <input id="birthPlace" type="text" placeholder="Ville, pays" />
+
+            <label for="productType">Type de rapport</label>
+            <select id="productType">
+              <option value="theme-natal">Thème natal</option>
+              <option value="degres-360">Interprétation 360 degrés</option>
+              <option value="transits">Transits actuels</option>
+            </select>
+
+            <label for="notes">Question ou demande spécifique</label>
+            <textarea id="notes" placeholder="Sentimental, professionnel, vocation, blocages, période actuelle, etc."></textarea>
+
+            <div class="small">
+              Nom et email sont requis. Le reste peut être enrichi ensuite. Mais pour faire de l’astrologie sérieuse,
+              il vaut mieux éviter de travailler dans le brouillard.
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Paiement</h3>
+
+            <div class="price-box">
+              <div class="price-name" id="productName">Rapport astrologique HeliosAstro</div>
+              <div class="price-value" id="productPrice">49.00 EUR</div>
+            </div>
+
+            <ul class="list">
+              <li>Paiement sécurisé via PayPal</li>
+              <li>Commande enregistrée avec vos informations</li>
+              <li>Validation et traitement automatisé</li>
+              <li>Génération du rapport PDF après paiement</li>
+            </ul>
+
+            <div id="paypal-button-container" class="paypal-zone"></div>
+            <div id="status" class="status"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <h2 class="section-title">Contact</h2>
+        <p class="section-intro">
+          Pour toute demande spécifique, partenariat, question éditoriale ou projet autour
+          de l’univers HeliosAstro, vous pouvez nous contacter directement.
+        </p>
+
+        <div class="card">
+          <h3>Coordonnées</h3>
+          <p>
+            Email : contact@heliosastro.com<br />
+            Instagram : @heliosastro<br />
+            Site : heliosastro.com
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    © HeliosAstro — Astrologie symbolique, logiciels, livres et rapports premium.
+  </footer>
+
+  <script>
+    const API_BASE = "https://TON-BACKEND.onrender.com";
+    let appConfig = null;
+
+    function showStatus(message, type = "bad", html = false) {
+      const box = document.getElementById("status");
+      box.className = `status show ${type}`;
+      if (html) {
+        box.innerHTML = message;
+      } else {
+        box.textContent = message;
+      }
+    }
+
+    function clearStatus() {
+      const box = document.getElementById("status");
+      box.className = "status";
+      box.textContent = "";
+      box.innerHTML = "";
+    }
+
+    function getCustomerData() {
+      return {
+        name: document.getElementById("name").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        birthDate: document.getElementById("birthDate").value.trim(),
+        birthTime: document.getElementById("birthTime").value.trim(),
+        birthPlace: document.getElementById("birthPlace").value.trim(),
+        productType: document.getElementById("productType").value,
+        notes: document.getElementById("notes").value.trim()
+      };
+    }
+
+    function validateCustomerData(data) {
+      if (!data.name) return "Le nom est requis.";
+      if (!data.email) return "L’email est requis.";
+      return null;
+    }
+
+    async function loadConfig() {
+      const res = await fetch(`${API_BASE}/api/config`);
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Impossible de charger la configuration.");
+      }
+
+      appConfig = data;
+      document.getElementById("productName").textContent = data.productName;
+      document.getElementById("productPrice").textContent = `${data.price} ${data.currency}`;
+    }
+
+    function loadPayPalSdk(clientId, currency) {
+      return new Promise((resolve, reject) => {
+        if (window.paypal) {
+          resolve();
+          return;
+        }
+
+        const script = document.createElement("script");
+        script.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(clientId)}&currency=${encodeURIComponent(currency)}`;
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error("Chargement du SDK PayPal impossible."));
+        document.body.appendChild(script);
+      });
+    }
+
+    async function renderPayPalButtons() {
+      await window.paypal.Buttons({
+        style: {
+          layout: "vertical",
+          shape: "pill",
+          label: "paypal"
+        },
+
+        createOrder: async function () {
+          clearStatus();
+
+          const customerData = getCustomerData();
+          const validationError = validateCustomerData(customerData);
+
+          if (validationError) {
+            showStatus(validationError, "bad");
+            throw new Error(validationError);
+          }
+
+          const response = await fetch(`${API_BASE}/api/create-order`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(customerData)
+          });
+
+          const result = await response.json();
+
+          if (!response.ok) {
+            const errorMsg = result.error || "Erreur de création de commande.";
+            showStatus(errorMsg, "bad");
+            throw new Error(errorMsg);
+          }
+
+          return result.id;
+        },
+
+        onApprove: async function (data) {
+          clearStatus();
+
+          const response = await fetch(`${API_BASE}/api/capture-order`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              orderID: data.orderID
+            })
+          });
+
+          const result = await response.json();
+
+          if (!response.ok) {
+            showStatus(result.error || "Erreur lors de la capture du paiement.", "bad");
+            return;
+          }
+
+          const downloadUrl = `${API_BASE}${result.downloadUrl}`;
+          showStatus(
+            `Paiement validé.<br><a class="download-link" href="${downloadUrl}" target="_blank" rel="noopener noreferrer">Télécharger votre PDF</a>`,
+            "ok",
+            true
+          );
+        },
+
+        onError: function (err) {
+          console.error(err);
+          showStatus("Erreur PayPal. Vérifie les clés, le mode sandbox/live et l’URL du backend.", "bad");
+        }
+      }).render("#paypal-button-container");
+    }
+
+    async function init() {
+      try {
+        await loadConfig();
+        await loadPayPalSdk(appConfig.paypalClientId, appConfig.currency);
+        await renderPayPalButtons();
+      } catch (error) {
+        console.error(error);
+        showStatus(error.message || "Erreur de démarrage du module de paiement.", "bad");
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
+
